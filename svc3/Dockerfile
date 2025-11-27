@@ -16,3 +16,5 @@ EXPOSE 8080
 
 # Chạy ứng dụng
 CMD ["python", "main.py"]
+
+# End
