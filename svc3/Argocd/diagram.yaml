@@ -1,0 +1,56 @@
+## https://app.diagrams.net/
+## -> Arrange -> Insert -> Mermaid...
+##
+
+graph TD
+    %% --- Định nghĩa các Actor và Dịch vụ bên ngoài ---
+    Dev["Developer👤"]
+    
+    subgraph GitHub ["GitHub Cloud"]
+        GitSource["📦 Source Code Repo<br/>(Code + Dockerfile)"]
+        GitManifest["📜 Manifest Repo<br/>(Deployment.yaml + Secret.yaml)"]
+    end
+
+    DockerHub["🐳 Docker Registry<br/>(Private Image)"]
+
+    %% --- Định nghĩa VM 1: CI Server ---
+    subgraph VM1 ["🖥️ VM 1: Jenkins CI"]
+        JenkinsApp["Jenkins Controller"]
+        DockerEngine["Docker Engine"]
+    end
+
+    %% --- Định nghĩa VM 2: CD & Production ---
+    subgraph VM2 ["🖥️ VM 2: Kubernetes K3s + ArgoCD"]
+        subgraph K8sCluster ["K8s Cluster"]
+            ArgoCD["🐙 ArgoCD Controller<br/>(namespace: argocd)"]
+            
+            subgraph AppNamespace ["namespace: app"]
+                K8sSecret["🔑 Secret: my-docker-secret"]
+                AppPod["🚀 App Pod<br/>(demo-app:v5)"]
+            end
+        end
+    end
+
+    %% --- Luồng CI (Continuous Integration) ---
+    Dev -- "1. Push code" --> GitSource
+    GitSource -- "2. Webhook/Poll Trigger" --> JenkinsApp
+    JenkinsApp -- "3. Checkout code" --> JenkinsApp
+    JenkinsApp -- "4. Build Image" --> DockerEngine
+    DockerEngine -- "5. Push Private Image (tag: v5)" --> DockerHub
+    JenkinsApp -- "6. Clone, edit image tag to :v5 & Push" --> GitManifest
+
+    %% --- Luồng CD (Continuous Delivery - GitOps) ---
+    ArgoCD -- "7. Auto-Detect & Sync (Pull)" --> GitManifest
+    ArgoCD -- "8. Apply manifests" --> AppNamespace
+    K8sSecret -.->|9. Authenticate Pull| DockerHub
+    DockerHub -- "10. Pull Image (v5)" --> AppPod
+
+    %% --- Styling ---
+    classDef github fill:#f0f6fc,stroke:#24292f,color:#24292f;
+    classDef jenkins fill:#d6e8fa,stroke:#0066cc,color:#0066cc;
+    classDef k8s fill:#e1f5fe,stroke:#0277bd,color:#0277bd;
+    classDef docker fill:#e6f7ff,stroke:#0086c2,color:#0086c2;
+    class GitHub github;
+    class VM1 jenkins;
+    class VM2 k8s;
+    class DockerHub docker;
