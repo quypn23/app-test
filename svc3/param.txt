@@ -1,3 +1,4 @@
+# test
 SERVICE_NAME=svc3
 ARGOCD_PROJECT=default
 REPLICA=3
