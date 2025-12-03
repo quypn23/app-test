@@ -1,6 +1,6 @@
 # test
 SERVICE_NAME=svc1
-ARGOCD_PROJECT=default
+ARGOCD_PROJECT=argocd
 REPLICA=2
 NAMESPACE=app
 CHART_PATH=gitOps-repo
