@@ -1,4 +1,4 @@
-# test
+# test 
 SERVICE_NAME=svc1
 ARGOCD_PROJECT=argocd
 REPLICA=1
