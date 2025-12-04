@@ -1,7 +1,7 @@
 # test
 SERVICE_NAME=svc2
 ARGOCD_PROJECT=argocd
-REPLICA=1
+REPLICA=2
 NAMESPACE=app
 CHART_PATH=gitOps-repo
 TARGET_CLUSTER=in-cluster
