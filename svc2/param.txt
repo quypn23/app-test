@@ -1,4 +1,4 @@
-# test 
+# test
 SERVICE_NAME=svc2
 REPLICA=1
 NAMESPACE=app
