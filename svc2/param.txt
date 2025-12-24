@@ -1,5 +1,5 @@
 # test
 SERVICE_NAME=svc2
-REPLICA=3
+REPLICA=1
 NAMESPACE=app
 CHART_PATH=gitOps-repo
